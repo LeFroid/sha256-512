@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "SHA512.h"
+#include "config.h"
 
 // K: first 64 bits of the fractional parts of the cube roots of the first 80 primes
 const static uint64_t K[80] =
@@ -173,11 +174,13 @@ uint64_t *getHash(PaddedMsg *p)
         0x5BE0CD19137E2179
     };
     
+#if MACHINE_BYTE_ORDER == LITTLE_ENDIAN
     // Convert byte order of message to big endian
     uint64_t *msg = ((uint64_t*)&p->msg[0]);
     for (int i = 0; i < N * 16; ++i)
         endianSwap(msg++);
-    
+#endif
+
     for (size_t i = 0; i < N; ++i)
     {
         uint64_t T1, T2;
