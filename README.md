@@ -8,7 +8,7 @@ uint64_t *digest = SHA512Hash(msg, 3);
 
 // Print the digest as a hex string
 for (int i = 0; i < HASH_ARRAY_LEN; ++i)
-    printf("%016" PRIx64 , digest[i];
+    printf("%016" PRIx64 , digest[i]);
 printf("\n");
 
 free(digest);
