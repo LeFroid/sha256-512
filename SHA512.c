@@ -35,10 +35,8 @@ const static uint64_t K[80] =
 
 // Utility functions
 // Rotate x to the right by numBits
-uint64_t rightRotate(uint64_t x, uint64_t numBits)
-{
-    return (x >> numBits) | (x << (64 - numBits));
-}
+#define ROTR(x, numBits) ( (x >> numBits) | (x << (64 - numBits)) )
+
 // Convert 64 bit unsigned integer from big to little endian or vice versa
 void endianSwap(uint64_t *x)
 {
@@ -63,30 +61,15 @@ void endianSwap128(__uint128_t *x)
 }
 
 // Compression functions
-uint64_t Ch(uint64_t x, uint64_t y, uint64_t z)
-{
-    return (x & y) ^ ((~x) & z);
-}
-uint64_t Maj(uint64_t x, uint64_t y, uint64_t z)
-{
-    return (x & y) ^ (x & z) ^ (y & z);
-}
-uint64_t BigSigma0(uint64_t x)
-{
-    return rightRotate(x, 28) ^ rightRotate(x, 34) ^ rightRotate(x, 39);
-}
-uint64_t BigSigma1(uint64_t x)
-{
-    return rightRotate(x, 14) ^ rightRotate(x, 18) ^ rightRotate(x, 41);
-}
-uint64_t SmallSigma0(uint64_t x)
-{
-    return rightRotate(x, 1) ^ rightRotate(x, 8) ^ (x >> 7);
-}
-uint64_t SmallSigma1(uint64_t x)
-{
-    return rightRotate(x, 19) ^ rightRotate(x, 61) ^ (x >> 6);
-}
+#define Ch(x,y,z) ( (x & y) ^ ((~x) & z) )
+#define Maj(x,y,z) ( (x & y) ^ (x & z) ^ (y & z) )
+
+#define BigSigma0(x) ( ROTR(x,28) ^ ROTR(x,34) ^ ROTR(x,39) )
+#define BigSigma1(x) ( ROTR(x,14) ^ ROTR(x,18) ^ ROTR(x,41) )
+
+#define SmallSigma0(x) ( ROTR(x,1) ^ ROTR(x,8) ^ (x >> 7) )
+#define SmallSigma1(x) ( ROTR(x,19) ^ ROTR(x,61) ^ (x >> 6) )
+
 // SHA512 message schedule
 // Calculate the Nth block of W
 uint64_t *W(int N, uint64_t *M)
@@ -130,7 +113,6 @@ PaddedMsg preprocess(uint8_t *msg, size_t len)
     }
     
     size_t l = len * 8;
-    size_t remainder = (l + 1) % 1024;
     size_t k = (896 - ( (l  + 1) % 1024 )) % 1024;
     //printf("k = %zu\n", k);
     //printf("l = %zu\n", l);
