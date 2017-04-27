@@ -55,17 +55,23 @@ void getChecksum(char *filename)
     }
     fclose(file);
     
-    uint64_t *checksum = SHA512Hash((uint8_t*)fileContents, fileSize);
-    for (int i = 0; i < HASH_ARRAY_LEN; ++i)
-        printf("%016" PRIx64 , checksum[i]);
-    printf("\n");
-    free(checksum);
+    if (progMode & MODE_512)
+    {
+        uint64_t *checksum = SHA512Hash((uint8_t*)fileContents, fileSize);
+        for (int i = 0; i < HASH_ARRAY_LEN; ++i)
+            printf("%016" PRIx64 , checksum[i]);
+        printf("\n");
+        free(checksum);
+    }
 
-    uint32_t *checksum2 = SHA256Hash((uint8_t*)fileContents, fileSize);
-    for (int i = 0; i < SHA256_ARRAY_LEN; ++i)
-        printf("%08" PRIx32 , checksum2[i]);
-    printf("\n");
-    free(checksum2);
+    if (progMode & MODE_256)
+    {
+        uint32_t *checksum2 = SHA256Hash((uint8_t*)fileContents, fileSize);
+        for (int i = 0; i < SHA256_ARRAY_LEN; ++i)
+            printf("%08" PRIx32 , checksum2[i]);
+        printf("\n");
+        free(checksum2);
+    }
     
     free(fileContents);
 }
