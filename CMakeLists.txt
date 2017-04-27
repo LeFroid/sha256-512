@@ -16,7 +16,7 @@ configure_file (
 )
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
-add_library(sha512 SHA512.c)
+add_library(sha512 SHA512.c SHA256.c)
 
 if(NOT ONLY_LIB)
   add_executable(sha main.c)
