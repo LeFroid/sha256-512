@@ -8,16 +8,12 @@
 #include <inttypes.h>
 #include <stdint.h>
 
+#include "SHACommon.h"
+
 #define SHA512_MESSAGE_BLOCK_SIZE 128
 #define SHA512_HASH_SIZE 64
 #define HASH_ARRAY_LEN 8
 #define MAX_VAL 0xFFFFFFFFFFFFFFFFLLU
-
-/// Padded message structure, contains the message length and the message itself
-typedef struct PaddedMsg {
-    size_t length;
-    uint8_t *msg;
-} PaddedMsg;
 
 /// Preprocesses the given message of len bytes
 PaddedMsg preprocess(uint8_t *msg, size_t len);

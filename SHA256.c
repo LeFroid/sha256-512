@@ -25,29 +25,6 @@ const static uint32_t K[64] =
 // Rotate x to the right by numBits
 #define ROTR(x, numBits) ( (x >> numBits) | (x << (32 - numBits)) )
 
-// Convert 32 bit unsigned integer from big to little endian or vice versa
-void endianSwap32(uint32_t *x)
-{
-    char *y = (char*)x;
-    for (size_t low = 0, high = sizeof(uint32_t) - 1; high > low; ++low, --high)
-    {
-        y[low]  ^= y[high];
-        y[high] ^= y[low];
-        y[low]  ^= y[high];
-    }
-}
-// Convert 64 bit unsigned integer from big -> little endian or vice versa
-void endianSwap64(uint64_t *x)
-{
-    char *y = (char*)x;
-    for (size_t low = 0, high = sizeof(uint64_t) - 1; high > low; ++low, --high)
-    {
-        y[low]  ^= y[high];
-        y[high] ^= y[low];
-        y[low]  ^= y[high];
-    }
-}
-
 // Compression functions
 #define Ch(x,y,z) ( (x & y) ^ ((~x) & z) )
 #define Maj(x,y,z) ( (x & y) ^ (x & z) ^ (y & z) )

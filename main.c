@@ -174,7 +174,10 @@ int main(int argc, char **argv)
                 }
             }
             if (argNumWithFile > -1)
+            {
                 getChecksum(argv[argNumWithFile]);
+                inputPos = argc + 1;
+            }
         }
         
         if (inputPos < argc)

@@ -8,7 +8,7 @@
 #include <inttypes.h>
 #include <stdint.h>
 
-#include "SHA512.h"
+#include "SHACommon.h"
 
 // Message block size measured in bytes
 #define SHA256_MESSAGE_BLOCK_SIZE 64 

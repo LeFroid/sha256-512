@@ -37,29 +37,6 @@ const static uint64_t K[80] =
 // Rotate x to the right by numBits
 #define ROTR(x, numBits) ( (x >> numBits) | (x << (64 - numBits)) )
 
-// Convert 64 bit unsigned integer from big to little endian or vice versa
-void endianSwap(uint64_t *x)
-{
-    char *y = (char*)x;
-    for (size_t low = 0, high = sizeof(uint64_t) - 1; high > low; ++low, --high)
-    {
-        y[low]  ^= y[high];
-        y[high] ^= y[low];
-        y[low]  ^= y[high];
-    }
-}
-// Convert 128 bit unsigned integer from big -> little endian or vice versa
-void endianSwap128(__uint128_t *x)
-{
-    char *y = (char*)x;
-    for (size_t low = 0, high = sizeof(__uint128_t) - 1; high > low; ++low, --high)
-    {
-        y[low]  ^= y[high];
-        y[high] ^= y[low];
-        y[low]  ^= y[high];
-    }
-}
-
 // Compression functions
 #define Ch(x,y,z) ( (x & y) ^ ((~x) & z) )
 #define Maj(x,y,z) ( (x & y) ^ (x & z) ^ (y & z) )
@@ -160,7 +137,7 @@ uint64_t *getHash(PaddedMsg *p)
     // Convert byte order of message to big endian
     uint64_t *msg = ((uint64_t*)&p->msg[0]);
     for (int i = 0; i < N * 16; ++i)
-        endianSwap(msg++);
+        endianSwap64(msg++);
 #endif
 
     for (size_t i = 0; i < N; ++i)
