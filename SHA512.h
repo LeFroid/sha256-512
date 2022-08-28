@@ -19,9 +19,10 @@
 PaddedMsg preprocess(uint8_t *msg, size_t len);
 
 /// Returns the sha-512 hash corresponding to the padded message: Return value must be free()'d
-uint64_t *getHash(PaddedMsg *p);
+uint64_t *getHash(PaddedMsg *p, uint64_t* iv);
 
 /// Wrapper for hashing methods, up to caller to free the return value
 uint64_t *SHA512Hash(uint8_t *input, size_t len);
+uint64_t *SHA512_256Hash(uint8_t *input, size_t len);
 
 #endif //__SHA512_H_

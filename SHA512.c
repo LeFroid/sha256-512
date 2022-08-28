@@ -112,17 +112,7 @@ PaddedMsg preprocess(uint8_t *msg, size_t len)
     return padded;
 }
 
-// Step 2:
-// Parse the padded message into N 1024-bit blocks
-// Each block separated into 64-bit words (therefore 16 per block)
-// Returns an array of 8 64 bit words corresponding to the hashed value
-uint64_t *getHash(PaddedMsg *p)
-{
-    size_t N = p->length / SHA512_MESSAGE_BLOCK_SIZE;
-    //printf("Number of blocks = %zu\n", N);
-    
-    // initial hash value
-    uint64_t h[8] = {
+uint64_t sha512_iv[8] = {
         0x6A09E667F3BCC908,
         0xBB67AE8584CAA73B,
         0x3C6EF372FE94F82B,
@@ -131,7 +121,31 @@ uint64_t *getHash(PaddedMsg *p)
         0x9B05688C2B3E6C1F,
         0x1F83D9ABFB41BD6B,
         0x5BE0CD19137E2179
-    };
+};
+
+uint64_t sha512_256_iv[8] = {
+	0x22312194FC2BF72C,
+	0x9F555FA3C84C64C2,
+	0x2393B86B6F53B151,
+       	0x963877195940EABD,
+	0x96283EE2A88EFFE3,
+       	0xBE5E1E2553863992,
+       	0x2B0199FC2C85B8AA,
+       	0x0EB72DDC81C52CA2
+};
+
+
+// Step 2:
+// Parse the padded message into N 1024-bit blocks
+// Each block separated into 64-bit words (therefore 16 per block)
+// Returns an array of 8 64 bit words corresponding to the hashed value
+uint64_t *getHash(PaddedMsg *p, uint64_t* iv)
+{
+    size_t N = p->length / SHA512_MESSAGE_BLOCK_SIZE;
+    //printf("Number of blocks = %zu\n", N);
+    
+    // initial hash value
+    uint64_t* h = iv;
     
 #if MACHINE_BYTE_ORDER == LITTLE_ENDIAN
     // Convert byte order of message to big endian
@@ -184,5 +198,14 @@ uint64_t *getHash(PaddedMsg *p)
 uint64_t *SHA512Hash(uint8_t *input, size_t len)
 {
     PaddedMsg paddedMsg = preprocess(input, len);
-    return getHash(&paddedMsg);
+    return getHash(&paddedMsg, sha512_iv);
 }
+
+uint64_t *SHA512_256Hash(uint8_t *input, size_t len)
+{
+    PaddedMsg paddedMsg = preprocess(input, len);
+    return getHash(&paddedMsg, sha512_256_iv);
+}
+
+
+
