@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.12)
 project(sha512)
 
 option(ONLY_LIB "Build the project as a library only" OFF)
